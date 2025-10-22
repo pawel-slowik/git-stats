@@ -1,0 +1,3 @@
+[MESSAGES CONTROL]
+# type checking is buggy (with false positives), mypy does it much better
+disable=missing-docstring,typecheck
