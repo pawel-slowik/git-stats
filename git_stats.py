@@ -102,17 +102,17 @@ def sort_stats(
         stats: Iterable[ContributorStats],
         sort_type: SortType,
     ) -> Iterable[ContributorStats]:
-    match sort_type:
-        case SortType.COUNT:
-            return sorted(stats, key=attrgetter("commit_count"), reverse=True)
-        case SortType.START:
-            return sorted(stats, key=attrgetter("first_commit_date"))
-        case SortType.DURATION:
-            return sorted(
-                stats,
-                key=lambda entry: entry.last_commit_date - entry.first_commit_date,
-                reverse=True,
-            )
+    if sort_type == SortType.COUNT:
+        return sorted(stats, key=attrgetter("commit_count"), reverse=True)
+    if sort_type == SortType.START:
+        return sorted(stats, key=attrgetter("first_commit_date"))
+    if sort_type == SortType.DURATION:
+        return sorted(
+            stats,
+            key=lambda entry: entry.last_commit_date - entry.first_commit_date,
+            reverse=True,
+        )
+    raise ValueError
 
 
 def main() -> None:
