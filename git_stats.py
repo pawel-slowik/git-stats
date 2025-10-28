@@ -4,6 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from operator import attrgetter
 from enum import Enum
+from itertools import chain
 import datetime as dt
 import subprocess
 import argparse
@@ -122,7 +123,7 @@ def main() -> None:
             Output includes author's name, commit count, date of first commit and activity period.
         """,
     )
-    parser.add_argument("path", help="path to Git repository")
+    parser.add_argument("path", nargs="+", help="path to Git repository")
     parser.add_argument(
         "--sort",
         choices=("count", "start", "duration",),
@@ -130,7 +131,8 @@ def main() -> None:
         help="display order",
     )
     args = parser.parse_args()
-    for stat in sort_stats(gather_stats(parse_log(read_log(args.path))), SortType(args.sort)):
+    log_lines = chain.from_iterable(map(read_log, args.path))
+    for stat in sort_stats(gather_stats(parse_log(log_lines)), SortType(args.sort)):
         print(f"{stat.name} {stat.commit_count} {stat.start_of_activity} {stat.activity_period}")
 
 

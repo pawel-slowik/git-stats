@@ -14,7 +14,7 @@ Download the `git_stats.py` file or clone the repository.
 
 ## Usage
 
-    usage: git_stats.py [-h] [--sort {count,start,duration}] path
+    usage: git_stats.py [-h] [--sort {count,start,duration}] path [path ...]
 
     Show author commit statistics for a Git repository.
 
