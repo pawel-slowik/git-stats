@@ -116,6 +116,23 @@ def sort_stats(
     raise ValueError
 
 
+def format_stats(stats: Iterable[ContributorStats]) -> Iterable[str]:
+    stats = tuple(stats)
+    name_column_width = max_name_length(stats) + 4
+    return (format_stat_line(stat, name_column_width) for stat in stats)
+
+
+def max_name_length(stats: Iterable[ContributorStats]) -> int:
+    return max(map(lambda stat: len(stat.name), stats))
+
+
+def format_stat_line(stat: ContributorStats, name_column_width: int) -> str:
+    return (
+        f"{stat.name} {'_' * (name_column_width - len(stat.name) - 1)}"
+        f" {stat.commit_count:5} {stat.start_of_activity} {stat.activity_period: >6}"
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Show author commit statistics for a Git repository.",
@@ -132,8 +149,9 @@ def main() -> None:
     )
     args = parser.parse_args()
     log_lines = chain.from_iterable(map(read_log, args.path))
-    for stat in sort_stats(gather_stats(parse_log(log_lines)), SortType(args.sort)):
-        print(f"{stat.name} {stat.commit_count} {stat.start_of_activity} {stat.activity_period}")
+    stats = gather_stats(parse_log(log_lines))
+    for line in format_stats(sort_stats(stats, SortType(args.sort))):
+        print(line)
 
 
 if __name__ == "__main__":
