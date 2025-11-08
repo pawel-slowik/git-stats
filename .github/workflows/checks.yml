@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: "3.14"
       - name: install development tools
-        run: pip install pylint mypy
+        run: pip install pylint pytest mypy
       - name: lint
         run: pylint --recursive y .
       - name: typecheck
