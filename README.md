@@ -6,6 +6,10 @@ This script displays contributor statistics for a Git repository.
 Git and Python 3.x. For Python, only the standard library is required, there's
 no need to install additional packages.
 
+The script relies on authors' names being consistent throughout the entire
+history of a repository. Inconsistencies can be worked around with a
+[gitmailmap](https://git-scm.com/docs/gitmailmap).
+
 
 ## Installation
 
