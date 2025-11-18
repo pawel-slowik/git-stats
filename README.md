@@ -1,3 +1,5 @@
+![checks status](https://github.com/pawel-slowik/git-stats/workflows/checks/badge.svg)
+
 This script displays contributor statistics for a Git repository.
 
 
