@@ -1,4 +1,8 @@
 ![checks status](https://github.com/pawel-slowik/git-stats/workflows/checks/badge.svg)
+[![coverage][coverage-badge]][coverage-url]
+
+[coverage-badge]: https://pawel-slowik.github.io/git-stats/badge.svg
+[coverage-url]: https://pawel-slowik.github.io/git-stats/
 
 This script displays contributor statistics for a Git repository.
 

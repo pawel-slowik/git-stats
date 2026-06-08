@@ -1,0 +1,6 @@
+[run]
+branch = True
+source = git_stats
+
+[report]
+omit = tests/*
