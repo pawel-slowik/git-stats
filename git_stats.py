@@ -51,12 +51,8 @@ class ContributorStats:
     commit_count: int
 
     @property
-    def activity_period(self) -> str:
-        return format_period(self.last_commit_date - self.first_commit_date)
-
-    @property
-    def start_of_activity(self) -> str:
-        return self.first_commit_date.strftime("%Y/%m")
+    def activity_period(self) -> dt.timedelta:
+        return self.last_commit_date - self.first_commit_date
 
 
 def format_period(period: dt.timedelta) -> str:
@@ -108,11 +104,7 @@ def sort_stats(
     if sort_type == SortType.START:
         return sorted(stats, key=attrgetter("first_commit_date"))
     if sort_type == SortType.DURATION:
-        return sorted(
-            stats,
-            key=lambda entry: entry.last_commit_date - entry.first_commit_date,
-            reverse=True,
-        )
+        return sorted(stats, key=attrgetter("activity_period"), reverse=True)
     raise ValueError
 
 
@@ -129,7 +121,9 @@ def max_name_length(stats: Iterable[ContributorStats]) -> int:
 def format_stat_line(stat: ContributorStats, name_column_width: int) -> str:
     return (
         f"{stat.name} {'_' * (name_column_width - len(stat.name) - 1)}"
-        f" {stat.commit_count:5} {stat.start_of_activity} {stat.activity_period: >6}"
+        f" {stat.commit_count:5}"
+        f" {stat.first_commit_date.strftime('%Y/%m')}"
+        f" {format_period(stat.activity_period): >6}"
     )
 
 
