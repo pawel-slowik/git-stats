@@ -27,3 +27,9 @@ def test_parse_line() -> None:
         second=16,
         tzinfo=dt.timezone(dt.timedelta(hours=1)),
     )
+
+
+def test_parse_utf8_decomposed_name() -> None:
+    entry = parse_line("2025-10-08T15:36:16+01:00 Ste\u0301phane")
+
+    assert entry.name == "St\u00e9phane"

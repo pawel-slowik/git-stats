@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from operator import attrgetter
 from enum import Enum
 from itertools import chain
+from unicodedata import normalize
 import datetime as dt
 import subprocess
 import argparse
@@ -38,7 +39,7 @@ def parse_line(line: str) -> LogEntry:
     if len(parts) != 2:
         raise ValueError
     return LogEntry(
-        name=parts[1].strip(),
+        name=normalize("NFC", parts[1].strip()),
         date=dt.datetime.fromisoformat(parts[0]),
     )
 
