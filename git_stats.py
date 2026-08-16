@@ -6,6 +6,7 @@ from operator import attrgetter
 from enum import Enum
 from itertools import chain
 from unicodedata import normalize
+from math import ceil
 import datetime as dt
 import subprocess
 import argparse
@@ -51,9 +52,15 @@ class ContributorStats:
     last_commit_date: dt.datetime
     commit_count: int
 
+    month_days = 365.2425 / 12 # good enough for comparisons
+
     @property
     def activity_period(self) -> dt.timedelta:
         return self.last_commit_date - self.first_commit_date
+
+    @property
+    def activity_months(self) -> int:
+        return max(1, ceil(self.activity_period.days / self.month_days))
 
 
 def format_period(period: dt.timedelta) -> str:
@@ -128,6 +135,16 @@ def format_stat_line(stat: ContributorStats, name_column_width: int) -> str:
     )
 
 
+def format_csv_row(stat: ContributorStats) -> str:
+    row = (
+        stat.name.replace(",", " "),
+        str(stat.commit_count),
+        stat.first_commit_date.strftime("%Y-%m-%d"),
+        str(stat.activity_months),
+    )
+    return ",".join(row)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Show author commit statistics for a Git repository.",
@@ -142,11 +159,22 @@ def main() -> None:
         default="start",
         help="display order",
     )
+    parser.add_argument(
+        "--csv",
+        action="store_true",
+        help="output as CSV",
+    )
+
     args = parser.parse_args()
     log_lines = chain.from_iterable(map(read_log, args.path))
     stats = gather_stats(parse_log(log_lines))
-    for line in format_stats(sort_stats(stats, SortType(args.sort))):
-        print(line)
+    sorted_stats = sort_stats(stats, SortType(args.sort))
+    if args.csv:
+        for entry in sorted_stats:
+            print(format_csv_row(entry))
+    else:
+        for line in format_stats(sorted_stats):
+            print(line)
 
 
 if __name__ == "__main__":

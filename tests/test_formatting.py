@@ -1,6 +1,7 @@
 import datetime as dt
 import pytest
-from git_stats import ContributorStats, format_period, format_stat_line, format_stats
+from git_stats import ContributorStats
+from git_stats import format_period, format_stat_line, format_stats, format_csv_row
 
 
 @pytest.mark.parametrize(
@@ -104,3 +105,14 @@ def test_output() -> None:
         "Eneko Valverde __________    11 2014/05     1m",
         "Carmen Maria Bermúdez ___     3 2020/05   1y1m",
     )
+
+
+def test_format_csv_row() -> None:
+    stats = ContributorStats(
+        name=" foo,Bar",
+        first_commit_date=dt.datetime(year=2025, month=12, day=10),
+        last_commit_date=dt.datetime(year=2026, month=12, day=10),
+        commit_count=200,
+    )
+
+    assert format_csv_row(stats) == " foo Bar,200,2025-12-10,12"
