@@ -4,7 +4,8 @@
 [coverage-badge]: https://pawel-slowik.github.io/git-stats/badge.svg
 [coverage-url]: https://pawel-slowik.github.io/git-stats/
 
-This script displays contributor statistics for a Git repository.
+This script displays contributor statistics for a Git repository. Can export as
+CSV.
 
 
 ## Requirements
@@ -24,7 +25,8 @@ Download the `git_stats.py` file or clone the repository.
 
 ## Usage
 
-    usage: git_stats.py [-h] [--sort {count,start,duration}] path [path ...]
+    usage: git_stats.py [-h] [--sort {count,start,duration}] [--csv]
+                        path [path ...]
 
     Show author commit statistics for a Git repository.
 
@@ -35,6 +37,7 @@ Download the `git_stats.py` file or clone the repository.
       -h, --help            show this help message and exit
       --sort {count,start,duration}
                             display order
+      --csv                 output as CSV
 
     Output includes author's name, commit count, date of first commit and activity
     period.
